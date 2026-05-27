@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, CheckCircle } from "lucide-react";
@@ -31,7 +30,6 @@ const inputClass =
 const labelClass = "block text-xs font-medium text-foreground/70 mb-1.5 tracking-wide";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -60,7 +58,7 @@ export default function LoginPage() {
         setError(data.error ?? "Login failed.");
         return;
       }
-      router.push(data.user.isAdmin ? "/admin" : "/portal");
+      window.location.href = data.user.isAdmin ? "/admin" : "/portal";
     } catch {
       setError("Network error. Please try again.");
     } finally {

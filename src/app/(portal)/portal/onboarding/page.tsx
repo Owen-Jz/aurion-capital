@@ -518,10 +518,10 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/auth/me").then((r) => r.json()),
-      fetch("/api/companies").then((r) => r.json()),
+      fetch("/api/auth/me", { credentials: "include" }).then((r) => r.json()),
+      fetch("/api/companies", { credentials: "include" }).then((r) => r.json()),
     ]).then(([authData, companyData]) => {
-      if (!authData.user) { router.push("/login"); return; }
+      if (!authData.user) { window.location.href = "/login"; return; }
       if (authData.user.onboardingComplete) { router.push("/portal"); return; }
       if (authData.user.isAdmin) { router.push("/admin"); return; }
       setUser(authData.user);

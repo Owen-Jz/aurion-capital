@@ -218,23 +218,23 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    fetch("/api/auth/me")
+    fetch("/api/auth/me", { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
-        if (!data.user) { router.push("/login"); return; }
+        if (!data.user) { window.location.href = "/login"; return; }
         setUser(data.user);
         // Redirect new users to onboarding unless they're already there
         if (!data.user.onboardingComplete && !pathname.startsWith("/portal/onboarding")) {
           router.push("/portal/onboarding");
         }
       })
-      .catch(() => router.push("/login"))
+      .catch(() => { window.location.href = "/login"; })
       .finally(() => setChecking(false));
   }, [router, pathname]);
 
   async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    window.location.href = "/login";
   }
 
   if (checking) {
