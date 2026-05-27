@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="65%" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="512" y2="512">
+      <stop offset="0%" stop-color="#1a3a5c"/>
+      <stop offset="100%" stop-color="#0a0f1e"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="45%">
+      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background: deep navy, rounded square -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="96" fill="url(#glow)"/>
+
+  <!-- Outer gold border accent (very subtle) -->
+  <rect width="512" height="512" rx="96" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="3"/>
+
+  <!-- Left stroke of A -->
+  <polygon points="256,74 70,446 118,446" fill="#f0ece2"/>
+
+  <!-- Right stroke of A -->
+  <polygon points="256,74 442,446 394,446" fill="#f0ece2"/>
+
+  <!-- Serif — bottom left -->
+  <rect x="46" y="434" width="96" height="14" rx="5" fill="#f0ece2"/>
+
+  <!-- Serif — bottom right -->
+  <rect x="370" y="434" width="96" height="14" rx="5" fill="#f0ece2"/>
+
+  <!-- Gold crossbar — the brand signature -->
+  <rect x="154" y="261" width="204" height="28" rx="7" fill="#c9a84c"/>
+
+  <!-- Thin gold accent bar above the A -->
+  <rect x="192" y="42" width="128" height="4" rx="2" fill="rgba(201,168,76,0.35)"/>
+</svg>
