@@ -169,9 +169,20 @@ function Sidebar({ user, onLogout }: { user: Session | null; onLogout: () => voi
   );
 }
 
+function initialsOf(name: string | undefined): string {
+  if (!name) return "—";
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((p) => p[0]?.toUpperCase() ?? "")
+    .slice(0, 2)
+    .join("");
+}
+
 function TopBar({ user }: { user: Session | null }) {
   const pathname = usePathname();
   const title = pageTitles[pathname] ?? (pathname.startsWith("/invest/") ? "Opportunity Details" : "Portal");
+  const today = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
   return (
     <header
@@ -184,7 +195,7 @@ function TopBar({ user }: { user: Session | null }) {
       <span className="text-base font-semibold text-foreground">{title}</span>
       <div className="flex items-center gap-4">
         <span className="text-xs" style={{ color: "var(--muted)" }}>
-          Updated May 23, 2026
+          Today, {today}
         </span>
         <Bell
           size={18}
@@ -201,9 +212,10 @@ function TopBar({ user }: { user: Session | null }) {
         <div
           className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
           style={{ background: "rgba(201,168,76,0.2)" }}
+          title={user?.name}
         >
           <span className="text-xs font-semibold" style={{ color: "#c9a84c" }}>
-            AP
+            {initialsOf(user?.name)}
           </span>
         </div>
       </div>

@@ -102,7 +102,8 @@ export default function AdminApplicationsPage() {
               color: filter === f ? "var(--foreground)" : "var(--muted)",
             }}
           >
-            {f === "all" ? "All" : STATUS_CONFIG[f]?.label ?? f} ({counts[f] ?? 0})
+            {f === "all" ? "All" : STATUS_CONFIG[f]?.label ?? f}
+            {!loading && ` (${counts[f] ?? 0})`}
           </button>
         ))}
       </div>

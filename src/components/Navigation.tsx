@@ -71,6 +71,11 @@ const navItems: NavItem[] = [
         href: "/capabilities/multi-asset",
         description: "Diversified strategies for total return",
       },
+      {
+        label: "AI Investments",
+        href: "/ai-investments",
+        description: "Tesla, NVIDIA, xAI and the AI growth basket",
+      },
     ],
   },
   {
@@ -102,6 +107,10 @@ const navItems: NavItem[] = [
   {
     label: "Insights",
     href: "/insights",
+  },
+  {
+    label: "Partnerships",
+    href: "/partnerships",
   },
   {
     label: "Contact",

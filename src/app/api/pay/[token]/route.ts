@@ -3,6 +3,12 @@ import { connectDB } from "@/lib/db";
 import { Application } from "@/lib/models/Application";
 import { Payment } from "@/lib/models/Payment";
 import { Company } from "@/lib/models/Company";
+import { getPlan } from "@/lib/plans";
+import {
+  ndaDocument,
+  subscriptionAgreement,
+  privatePlacementMemorandum,
+} from "@/lib/documents";
 
 export async function GET(
   _request: NextRequest,
@@ -27,7 +33,58 @@ export async function GET(
     .select("name sector")
     .lean();
 
-  return NextResponse.json({ application, company });
+  const app = application as unknown as {
+    _id: { toString(): string };
+    tierName: string;
+    tierShares: number;
+    amount: number;
+    planId?: string;
+    createdAt: Date;
+    userId: { name: string };
+  };
+  const plan = getPlan(app.planId);
+  const userName = app.userId?.name ?? "Investor";
+
+  const docArgs = {
+    investorName: userName,
+    companyName: (company as { name: string } | null)?.name ?? "Company",
+    tierName: app.tierName,
+    amount: app.amount,
+    shares: app.tierShares,
+    plan,
+    applicationDate: app.createdAt?.toISOString?.() ?? new Date().toISOString(),
+  };
+
+  const documents = [
+    {
+      id: "nda",
+      type: "Non-Disclosure & Investment Return Agreement",
+      shortName: "NDA",
+      filename: `Aurion-NDA-${docArgs.companyName.replace(/\s+/g, "_")}.md`,
+      content: ndaDocument(docArgs),
+    },
+    {
+      id: "subscription",
+      type: "Subscription Agreement",
+      shortName: "Subscription",
+      filename: `Aurion-Subscription-${docArgs.companyName.replace(/\s+/g, "_")}.md`,
+      content: subscriptionAgreement(docArgs),
+    },
+    {
+      id: "ppm",
+      type: "Private Placement Memorandum",
+      shortName: "PPM",
+      filename: `Aurion-PPM-${docArgs.companyName.replace(/\s+/g, "_")}.md`,
+      content: privatePlacementMemorandum(docArgs),
+    },
+  ];
+
+  return NextResponse.json({
+    application,
+    company,
+    plan,
+    documents,
+  });
 }
 
 export async function POST(
@@ -36,7 +93,14 @@ export async function POST(
 ) {
   const { token } = await params;
   const body = await request.json();
-  const { method, proofUrl } = body;
+  const { method, proofUrl, documentsAcknowledged } = body;
+
+  if (!documentsAcknowledged) {
+    return NextResponse.json(
+      { error: "You must review the subscription documents before submitting payment." },
+      { status: 400 }
+    );
+  }
 
   await connectDB();
 

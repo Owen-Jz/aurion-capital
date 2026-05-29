@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Statistics from "@/components/Statistics";
 import About from "@/components/About";
 import Capabilities from "@/components/Capabilities";
+import FeaturedAI from "@/components/FeaturedAI";
 import Impact from "@/components/Impact";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
@@ -16,6 +17,7 @@ export default function Home() {
         <Statistics />
         <About />
         <Capabilities />
+        <FeaturedAI />
         <Impact />
         <Newsletter />
       </main>

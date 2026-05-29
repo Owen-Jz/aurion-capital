@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# admin-uploaded partnership documents (real executed agreements)
+/public/uploads/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -46,3 +49,6 @@ next-env.d.ts
 *.db
 *.db-shm
 *.db-wal
+
+.vercel
+.gstack/

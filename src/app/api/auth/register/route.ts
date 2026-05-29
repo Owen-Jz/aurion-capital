@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { User } from "@/lib/models/User";
-import { hashPassword, createSession, sessionCookieOptions } from "@/lib/auth";
+import { hashPassword } from "@/lib/auth";
+import { emailAccountSubmitted } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { name, email, password, firm, phone, investorType } = body;
+  const {
+    name,
+    email,
+    password,
+    firm,
+    phone,
+    investorType,
+    questionnaire,
+    otpEnabled,
+  } = body;
 
   if (!name || !email || !password) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -25,12 +35,26 @@ export async function POST(request: NextRequest) {
     firm: firm || undefined,
     phone: phone || undefined,
     investorType: investorType || "individual",
+    accountStatus: "pending_review",
+    kycStatus: "pending",
+    onboardingComplete: false,
+    otpEnabled: !!otpEnabled,
+    questionnaire: questionnaire
+      ? { ...questionnaire, submittedAt: new Date() }
+      : undefined,
   });
 
-  const token = await createSession(user._id.toString());
-  const res = NextResponse.json({
-    user: { id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin, onboardingComplete: false },
+  // Fire the "under review" email — non-blocking on errors so registration
+  // succeeds even if mail transport hiccups.
+  emailAccountSubmitted({ to: user.email, name: user.name }).catch((err) => {
+    console.error("[register] failed to send submission email:", err);
   });
-  res.cookies.set(sessionCookieOptions(token));
-  return res;
+
+  // IMPORTANT: do not create a session. Account is on hold until admin approves.
+  return NextResponse.json({
+    success: true,
+    accountStatus: "pending_review",
+    message:
+      "Your application has been submitted. Our compliance team will review your file and respond within 1–3 business days.",
+  });
 }

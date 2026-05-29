@@ -8,6 +8,8 @@ export interface IApplication extends Document {
   tierPrice: number;
   tierShares: number;
   amount: number;
+  planId: string;
+  planLabel: string;
   status: string;
   adminNote?: string;
   paymentToken?: string;
@@ -24,6 +26,8 @@ const ApplicationSchema = new Schema<IApplication>(
     tierPrice: { type: Number, required: true },
     tierShares: { type: Number, required: true },
     amount: { type: Number, required: true },
+    planId: { type: String, default: "1y" },
+    planLabel: { type: String, default: "1 year" },
     status: { type: String, default: "pending" },
     adminNote: { type: String },
     paymentToken: { type: String, unique: true, sparse: true },

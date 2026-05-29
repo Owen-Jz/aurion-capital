@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Aurion AI explainer video poster">
+  <defs>
+    <linearGradient id="vbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0f1e"/>
+      <stop offset="50%" stop-color="#1a2a4a"/>
+      <stop offset="100%" stop-color="#0d1117"/>
+    </linearGradient>
+    <radialGradient id="vglow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(201,168,76,0.25)"/>
+      <stop offset="60%" stop-color="rgba(201,168,76,0.05)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#vbg)"/>
+  <circle cx="640" cy="360" r="420" fill="url(#vglow)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="rgba(201,168,76,0.04)" stroke-width="1">
+    <line x1="0" y1="180" x2="1280" y2="180"/>
+    <line x1="0" y1="360" x2="1280" y2="360"/>
+    <line x1="0" y1="540" x2="1280" y2="540"/>
+    <line x1="320" y1="0" x2="320" y2="720"/>
+    <line x1="640" y1="0" x2="640" y2="720"/>
+    <line x1="960" y1="0" x2="960" y2="720"/>
+  </g>
+
+  <!-- Aurion mark center -->
+  <g transform="translate(640,300)">
+    <polygon points="0,-90 -120,90 -90,90" fill="rgba(240,236,226,0.95)"/>
+    <polygon points="0,-90 120,90 90,90" fill="rgba(240,236,226,0.95)"/>
+    <rect x="-100" y="84" width="60" height="9" rx="3" fill="rgba(240,236,226,0.95)"/>
+    <rect x="40" y="84" width="60" height="9" rx="3" fill="rgba(240,236,226,0.95)"/>
+    <rect x="-65" y="-25" width="130" height="18" rx="5" fill="#c9a84c"/>
+  </g>
+
+  <!-- Editorial caption -->
+  <text x="640" y="470" font-family="Georgia, serif" font-size="48" fill="rgba(255,255,255,0.95)" text-anchor="middle" font-weight="bold">
+    The Aurion AI Strategy
+  </text>
+  <text x="640" y="510" font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#c9a84c" text-anchor="middle" letter-spacing="6">
+    EXPLAINER · 4 MIN · INVESTOR ONBOARDING
+  </text>
+
+  <!-- Play button -->
+  <g transform="translate(640,610)">
+    <circle r="36" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="2"/>
+    <polygon points="-9,-14 -9,14 16,0" fill="#c9a84c"/>
+  </g>
+</svg>

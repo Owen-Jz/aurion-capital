@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Users, FileText, LogOut, Building2, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Users, FileText, LogOut, Building2, ChevronRight, Handshake } from "lucide-react";
 
 interface AdminUser {
   name: string;
@@ -16,6 +16,7 @@ const navLinks = [
   { label: "Applications", href: "/admin/applications", icon: FileText },
   { label: "Companies", href: "/admin/companies", icon: Building2 },
   { label: "Investors", href: "/admin/users", icon: Users },
+  { label: "Partnerships", href: "/admin/partnerships", icon: Handshake },
 ];
 
 function AurionMark() {

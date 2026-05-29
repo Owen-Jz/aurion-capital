@@ -3,14 +3,15 @@ import { connectDB } from "@/lib/db";
 import { User } from "@/lib/models/User";
 import { Application } from "@/lib/models/Application";
 import { getCurrentUser } from "@/lib/auth";
+import { emailAccountApproved, emailAccountRejected } from "@/lib/email";
 
 export async function GET() {
-  const user = await getCurrentUser() as { isAdmin: boolean } | null;
+  const user = (await getCurrentUser()) as { isAdmin: boolean } | null;
   if (!user?.isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   await connectDB();
   const users = await User.find({ isAdmin: false })
-    .select("-password")
+    .select("-password -otpSecret -otpBackupCodes")
     .sort({ createdAt: -1 })
     .lean();
 
@@ -32,16 +33,49 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  const user = await getCurrentUser() as { isAdmin: boolean } | null;
-  if (!user?.isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const currentUser = (await getCurrentUser()) as
+    | { _id: { toString(): string }; isAdmin: boolean; email: string }
+    | null;
+  if (!currentUser?.isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await request.json();
-  const { id, kycStatus } = body;
+  const { id, accountStatus, kycStatus, rejectionReason } = body;
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
   await connectDB();
-  const updated = await User.findByIdAndUpdate(id, { kycStatus }, { new: true }).select("-password");
+
+  const update: Record<string, unknown> = {};
+  if (kycStatus) update.kycStatus = kycStatus;
+  if (rejectionReason !== undefined) update.rejectionReason = rejectionReason;
+
+  if (accountStatus) {
+    update.accountStatus = accountStatus;
+    if (accountStatus === "approved") {
+      update.kycStatus = kycStatus ?? "approved";
+      update.approvedAt = new Date();
+      update.approvedBy = currentUser.email;
+      update.onboardingComplete = true;
+    }
+  }
+
+  const updated = await User.findByIdAndUpdate(id, update, { new: true })
+    .select("-password -otpSecret -otpBackupCodes");
   if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  // Trigger lifecycle emails — fire-and-forget so the API stays responsive.
+  if (accountStatus === "approved") {
+    emailAccountApproved({ to: updated.email, name: updated.name }).catch((err) =>
+      console.error("[admin/users] approve email failed:", err)
+    );
+  } else if (accountStatus === "rejected") {
+    emailAccountRejected({
+      to: updated.email,
+      name: updated.name,
+      reason: rejectionReason,
+    }).catch((err) =>
+      console.error("[admin/users] reject email failed:", err)
+    );
+  }
 
   return NextResponse.json({ user: updated });
 }

@@ -3,15 +3,14 @@ import { connectDB } from "@/lib/db";
 import { Application } from "@/lib/models/Application";
 import { Company } from "@/lib/models/Company";
 import { getCurrentUser } from "@/lib/auth";
+import { getPlan } from "@/lib/plans";
 
 export async function POST(request: NextRequest) {
-  const user = await getCurrentUser() as { _id: string } | null;
-  if (!user) {
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
-  }
+  const user = (await getCurrentUser()) as { _id: string } | null;
+  if (!user) return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
 
   const body = await request.json();
-  const { companyId, tierId } = body;
+  const { companyId, tierId, planId } = body;
 
   if (!companyId || !tierId) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -24,7 +23,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Company not found" }, { status: 404 });
   }
 
-  const tier = company.tiers.find((t: { _id?: { toString(): string }; available: boolean; name: string; price: number; shares: number }) => t._id?.toString() === tierId);
+  const tier = company.tiers.find(
+    (t: { _id?: { toString(): string }; available: boolean; name: string; price: number; shares: number }) =>
+      t._id?.toString() === tierId
+  );
   if (!tier || !tier.available) {
     return NextResponse.json({ error: "Tier not available" }, { status: 400 });
   }
@@ -35,8 +37,13 @@ export async function POST(request: NextRequest) {
     status: { $in: ["pending", "approved"] },
   });
   if (existing) {
-    return NextResponse.json({ error: "You already have an active application for this company" }, { status: 409 });
+    return NextResponse.json(
+      { error: "You already have an active application for this company" },
+      { status: 409 }
+    );
   }
+
+  const plan = getPlan(planId);
 
   const application = await Application.create({
     userId: user._id,
@@ -46,16 +53,16 @@ export async function POST(request: NextRequest) {
     tierPrice: tier.price,
     tierShares: tier.shares,
     amount: tier.price,
+    planId: plan.id,
+    planLabel: plan.label,
   });
 
   return NextResponse.json({ application }, { status: 201 });
 }
 
 export async function GET() {
-  const user = await getCurrentUser() as { _id: string } | null;
-  if (!user) {
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
-  }
+  const user = (await getCurrentUser()) as { _id: string } | null;
+  if (!user) return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
 
   await connectDB();
   const applications = await Application.find({ userId: user._id })

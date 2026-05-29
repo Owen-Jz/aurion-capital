@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-label="AI infrastructure illustration">
+  <defs>
+    <linearGradient id="dcbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0f1e"/>
+      <stop offset="100%" stop-color="#1a2a4a"/>
+    </linearGradient>
+    <linearGradient id="rack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1f2a3f"/>
+      <stop offset="100%" stop-color="#0d1322"/>
+    </linearGradient>
+    <pattern id="rackRows" x="0" y="0" width="60" height="22" patternUnits="userSpaceOnUse">
+      <rect x="4" y="2" width="52" height="18" fill="#0a0f1e" stroke="rgba(201,168,76,0.1)" stroke-width="0.5"/>
+      <circle cx="10" cy="11" r="1.5" fill="#22c55e"/>
+      <circle cx="18" cy="11" r="1.5" fill="rgba(201,168,76,0.4)"/>
+      <rect x="28" y="9" width="20" height="4" fill="rgba(201,168,76,0.15)"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="450" fill="url(#dcbg)"/>
+
+  <path d="M 0 350 L 800 350 L 800 450 L 0 450 Z" fill="rgba(255,255,255,0.02)"/>
+  <g stroke="rgba(201,168,76,0.06)" stroke-width="1">
+    <line x1="0" y1="380" x2="800" y2="380"/>
+    <line x1="0" y1="410" x2="800" y2="410"/>
+  </g>
+
+  <!-- Server racks -->
+  <g>
+    <rect x="60"  y="100" width="60" height="240" fill="url(#rack)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <rect x="60"  y="110" width="60" height="220" fill="url(#rackRows)"/>
+    <rect x="150" y="100" width="60" height="240" fill="url(#rack)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <rect x="150" y="110" width="60" height="220" fill="url(#rackRows)"/>
+    <rect x="240" y="100" width="60" height="240" fill="url(#rack)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <rect x="240" y="110" width="60" height="220" fill="url(#rackRows)"/>
+    <rect x="330" y="100" width="60" height="240" fill="url(#rack)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <rect x="330" y="110" width="60" height="220" fill="url(#rackRows)"/>
+    <rect x="420" y="100" width="60" height="240" fill="url(#rack)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <rect x="420" y="110" width="60" height="220" fill="url(#rackRows)"/>
+    <rect x="510" y="100" width="60" height="240" fill="url(#rack)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <rect x="510" y="110" width="60" height="220" fill="url(#rackRows)"/>
+    <rect x="600" y="100" width="60" height="240" fill="url(#rack)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <rect x="600" y="110" width="60" height="220" fill="url(#rackRows)"/>
+    <rect x="690" y="100" width="60" height="240" fill="url(#rack)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <rect x="690" y="110" width="60" height="220" fill="url(#rackRows)"/>
+  </g>
+
+  <!-- Pulsing rack indicators -->
+  <g>
+    <circle cx="70" cy="120" r="2" fill="#c9a84c"/>
+    <circle cx="160" cy="142" r="2" fill="#c9a84c"/>
+    <circle cx="250" cy="186" r="2" fill="#c9a84c"/>
+    <circle cx="340" cy="230" r="2" fill="#c9a84c"/>
+    <circle cx="430" cy="120" r="2" fill="#c9a84c"/>
+    <circle cx="520" cy="252" r="2" fill="#c9a84c"/>
+    <circle cx="610" cy="164" r="2" fill="#c9a84c"/>
+    <circle cx="700" cy="208" r="2" fill="#c9a84c"/>
+  </g>
+
+  <!-- Center glow -->
+  <ellipse cx="400" cy="220" rx="300" ry="120" fill="rgba(201,168,76,0.06)"/>
+
+  <!-- Editorial label -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="3" height="40" fill="#c9a84c"/>
+    <text x="12" y="18" font-family="Georgia, serif" font-size="13" fill="#c9a84c" letter-spacing="4" font-weight="bold">AI COMPUTE GRID</text>
+    <text x="12" y="34" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="rgba(255,255,255,0.5)" letter-spacing="1.5">NVIDIA BLACKWELL · 30,000 GPU CLUSTER</text>
+  </g>
+</svg>
