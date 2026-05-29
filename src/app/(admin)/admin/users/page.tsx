@@ -324,6 +324,27 @@ export default function AdminUsersPage() {
                   Suspend account
                 </button>
               )}
+
+              {openInvestor.accountStatus === "suspended" && (
+                <div className="space-y-2">
+                  <button
+                    onClick={() => updateStatus(openInvestor._id, "approved")}
+                    disabled={updating === openInvestor._id}
+                    className="w-full py-2.5 text-sm font-semibold rounded-sm flex items-center justify-center gap-2"
+                    style={{ background: "rgba(34,197,94,0.1)", color: "#22c55e" }}
+                  >
+                    <ShieldCheck size={14} /> Reinstate account
+                  </button>
+                  <button
+                    onClick={() => updateStatus(openInvestor._id, "rejected", rejectReason || undefined)}
+                    disabled={updating === openInvestor._id}
+                    className="w-full py-2.5 text-sm font-semibold rounded-sm flex items-center justify-center gap-2"
+                    style={{ background: "rgba(239,68,68,0.1)", color: "#ef4444" }}
+                  >
+                    <XCircle size={14} /> Close account permanently
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

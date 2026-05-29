@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { User } from "@/lib/models/User";
 import { hashPassword } from "@/lib/auth";
-import { emailAccountSubmitted } from "@/lib/email";
+import { emailAccountSubmitted, emailAdminNewApplication } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -48,6 +48,18 @@ export async function POST(request: NextRequest) {
   // succeeds even if mail transport hiccups.
   emailAccountSubmitted({ to: user.email, name: user.name }).catch((err) => {
     console.error("[register] failed to send submission email:", err);
+  });
+
+  // Alert admin that a new application is waiting for review.
+  emailAdminNewApplication({
+    name: user.name,
+    email: user.email,
+    investorType: user.investorType,
+    firm: user.firm,
+    isAccredited: questionnaire?.isAccredited,
+    expectedSize: questionnaire?.expectedInvestmentSize,
+  }).catch((err) => {
+    console.error("[register] failed to send admin alert:", err);
   });
 
   // IMPORTANT: do not create a session. Account is on hold until admin approves.

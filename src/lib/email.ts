@@ -12,6 +12,7 @@
 const FROM_EMAIL =
   process.env.MAIL_FROM ?? "Aurion Capital Group <no-reply@aurioncapital.com>";
 const REPLY_TO = process.env.MAIL_REPLY_TO ?? "investorrelations@aurioncapital.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? REPLY_TO;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://aurioncapital.com";
 
 type SendArgs = {
@@ -199,6 +200,41 @@ export async function emailAccountRejected(opts: {
     subject: "Update regarding your Aurion Capital application",
     html: shell({
       title: "Application decision",
+      bodyHtml: body,
+    }),
+  });
+}
+
+export async function emailAdminNewApplication(opts: {
+  name: string;
+  email: string;
+  investorType: string;
+  firm?: string;
+  isAccredited?: boolean;
+  expectedSize?: string;
+}) {
+  const { name, email, investorType, firm, isAccredited, expectedSize } = opts;
+  const reviewUrl = `${APP_URL}/admin/users`;
+  const body = `
+    <p style="margin:0 0 16px;">A new investor application has been submitted and is awaiting compliance review.</p>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border:1px solid #e6dfcc;margin:20px 0;">
+      <tr style="background:#fbf9f3;"><td style="padding:12px 16px;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.14em;color:#7a7468;text-transform:uppercase;" colspan="2">Applicant Summary</td></tr>
+      ${row("Name", escapeHtml(name))}
+      ${row("Email", escapeHtml(email))}
+      ${row("Investor type", escapeHtml(investorType))}
+      ${firm ? row("Firm / Organisation", escapeHtml(firm)) : ""}
+      ${row("Accredited investor", isAccredited ? "Yes" : "No / Not disclosed")}
+      ${expectedSize ? row("Expected first-year commitment", escapeHtml(expectedSize)) : ""}
+    </table>
+    ${btn(reviewUrl, "Review Application")}
+    <p style="margin:0 0 16px;font-size:13px;color:#5a5448;">Please log in to the admin portal and navigate to <strong>Investors</strong> to approve or decline this application. The applicant has been informed that their file is under review.</p>
+  `;
+  await sendEmail({
+    to: ADMIN_EMAIL,
+    subject: `New investor application — ${name}`,
+    html: shell({
+      title: "New application for review",
+      preheader: `${name} (${email}) has submitted an investor application and is awaiting review.`,
       bodyHtml: body,
     }),
   });
