@@ -38,19 +38,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    fetch("/api/auth/me")
+    fetch("/api/admin/auth/me")
       .then((r) => r.json())
       .then((d) => {
-        if (!d.user || !d.user.isAdmin) router.push("/login");
+        if (!d.user) router.push("/admin/login");
         else setUser(d.user);
       })
-      .catch(() => router.push("/login"))
+      .catch(() => router.push("/admin/login"))
       .finally(() => setChecking(false));
   }, [router]);
 
   async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    await fetch("/api/admin/auth/logout", { method: "POST" });
+    window.location.href = "/admin/login";
   }
 
   if (checking) {

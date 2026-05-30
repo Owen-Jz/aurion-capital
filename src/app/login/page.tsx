@@ -63,6 +63,10 @@ export default function LoginPage() {
         setStage("rejected");
         return;
       }
+      if (res.status === 403 && data.redirectTo) {
+        window.location.href = data.redirectTo;
+        return;
+      }
       if (!res.ok) {
         setError(data.error ?? "Login failed.");
         return;
@@ -71,7 +75,7 @@ export default function LoginPage() {
         setStage("otp");
         return;
       }
-      window.location.href = data.user.isAdmin ? "/admin" : "/portal";
+      window.location.href = "/portal";
     } catch {
       setError("Network error. Please try again.");
     } finally {

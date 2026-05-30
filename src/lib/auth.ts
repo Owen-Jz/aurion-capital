@@ -69,3 +69,28 @@ export function sessionCookieOptions(token: string) {
 }
 
 export const SESSION_COOKIE_NAME = SESSION_COOKIE;
+
+/* ── Admin session (separate cookie, separate auth path) ────────────────── */
+
+const ADMIN_SESSION_COOKIE = "aurion_admin_session";
+
+export const ADMIN_SESSION_COOKIE_NAME = ADMIN_SESSION_COOKIE;
+
+export async function getCurrentAdminUser() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
+  if (!token) return null;
+  return getSessionUser(token);
+}
+
+export function adminSessionCookieOptions(token: string) {
+  return {
+    name: ADMIN_SESSION_COOKIE,
+    value: token,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    maxAge: SESSION_DURATION_MS / 1000,
+    path: "/",
+  };
+}

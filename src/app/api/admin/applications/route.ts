@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Application } from "@/lib/models/Application";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentAdminUser } from "@/lib/auth";
 import crypto from "crypto";
 
 export async function GET() {
-  const user = await getCurrentUser() as { isAdmin: boolean } | null;
+  const user = await getCurrentAdminUser() as { isAdmin: boolean } | null;
   if (!user?.isAdmin) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -21,7 +21,7 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  const user = await getCurrentUser() as { isAdmin: boolean } | null;
+  const user = await getCurrentAdminUser() as { isAdmin: boolean } | null;
   if (!user?.isAdmin) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Partnership } from "@/lib/models/Partnership";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentAdminUser } from "@/lib/auth";
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -17,7 +17,7 @@ const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads", "partnerships");
 
 async function requireAdmin() {
-  const user = (await getCurrentUser()) as
+  const user = (await getCurrentAdminUser()) as
     | { email: string; isAdmin: boolean }
     | null;
   if (!user?.isAdmin) return null;

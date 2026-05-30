@@ -20,6 +20,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
   }
 
+  /* ── Admin accounts must use the dedicated admin portal ─────────── */
+  if (user.isAdmin) {
+    return NextResponse.json(
+      {
+        error:
+          "Administrator accounts cannot access the investor portal. Please sign in at /admin/login.",
+        redirectTo: "/admin/login",
+      },
+      { status: 403 }
+    );
+  }
+
   /* ── Account-status gating ────────────────────────────────────────── */
   if (user.accountStatus === "pending_review") {
     return NextResponse.json(

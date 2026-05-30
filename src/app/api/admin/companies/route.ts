@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Company } from "@/lib/models/Company";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentAdminUser } from "@/lib/auth";
 
 async function requireAdmin() {
-  const user = await getCurrentUser() as { isAdmin: boolean } | null;
+  const user = await getCurrentAdminUser() as { isAdmin: boolean } | null;
   if (!user?.isAdmin) return null;
   return user;
 }

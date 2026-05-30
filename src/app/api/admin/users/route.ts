@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { User } from "@/lib/models/User";
 import { Application } from "@/lib/models/Application";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentAdminUser } from "@/lib/auth";
 import { emailAccountApproved, emailAccountRejected } from "@/lib/email";
 
 export async function GET() {
-  const user = (await getCurrentUser()) as { isAdmin: boolean } | null;
+  const user = (await getCurrentAdminUser()) as { isAdmin: boolean } | null;
   if (!user?.isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   await connectDB();
@@ -33,7 +33,7 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  const currentUser = (await getCurrentUser()) as
+  const currentUser = (await getCurrentAdminUser()) as
     | { _id: { toString(): string }; isAdmin: boolean; email: string }
     | null;
   if (!currentUser?.isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });

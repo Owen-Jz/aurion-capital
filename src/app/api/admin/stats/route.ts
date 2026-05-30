@@ -3,10 +3,10 @@ import { connectDB } from "@/lib/db";
 import { Application } from "@/lib/models/Application";
 import { User } from "@/lib/models/User";
 import { Company } from "@/lib/models/Company";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentAdminUser } from "@/lib/auth";
 
 export async function GET() {
-  const user = await getCurrentUser() as { isAdmin: boolean } | null;
+  const user = await getCurrentAdminUser() as { isAdmin: boolean } | null;
   if (!user?.isAdmin) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
